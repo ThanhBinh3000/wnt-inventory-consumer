@@ -5,6 +5,11 @@ import org.springframework.data.domain.Page;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,4 +86,20 @@ public class DataUtils {
         // Thêm các trường hợp chuyển đổi khác nếu cần
         return value;
     }
+
+    public static Date toDate(LocalDateTime localDateTime) {
+        // Convert LocalDateTime to ZonedDateTime
+        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+        // Convert ZonedDateTime to Date
+        return Date.from(zonedDateTime.toInstant());
+    }
+
+    public static String toString(Date date) {
+        // Create an instance of SimpleDateFormat
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Format the date
+        return formatter.format(date);
+    }
+
 }

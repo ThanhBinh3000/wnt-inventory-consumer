@@ -1,10 +1,12 @@
 package vn.com.gsoft.inventory.model.dto;
 
 import lombok.Data;
+import vn.com.gsoft.inventory.entity.PhieuXuatChiTiets;
 import vn.com.gsoft.inventory.model.system.BaseRequest;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -84,4 +86,8 @@ public class PhieuXuatsReq extends BaseRequest {
     private String resultZNS;
     private Long idPaymentQR;
     private Long targetManagementId;
+
+    private Boolean IsConnectivity;
+
+    private List<PhieuXuatChiTiets> chiTiets;
 }

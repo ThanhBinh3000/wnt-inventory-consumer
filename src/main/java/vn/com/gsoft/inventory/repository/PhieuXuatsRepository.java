@@ -136,4 +136,6 @@ public interface PhieuXuatsRepository extends BaseRepository<PhieuXuats, PhieuXu
     )
     List<PhieuXuats> searchList(@Param("param") PhieuXuatsReq param);
 
+    @Query("SELECT MAX(px.soPhieuXuat) FROM PhieuXuats px")
+    Long findBySoPhieuXuatMax();
 }

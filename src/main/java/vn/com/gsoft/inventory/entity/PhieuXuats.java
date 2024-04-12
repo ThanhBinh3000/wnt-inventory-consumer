@@ -175,5 +175,10 @@ public class PhieuXuats extends BaseEntity {
     private Long idPaymentQR;
     @Column(name = "TargetManagementId")
     private Long targetManagementId;
+
+    @Transient
+    private Boolean IsConnectivity;
+    @Transient
+    private Boolean IsManagement;
 }
 
