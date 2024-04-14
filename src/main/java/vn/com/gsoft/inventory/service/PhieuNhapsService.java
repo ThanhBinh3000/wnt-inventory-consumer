@@ -11,4 +11,6 @@ public interface PhieuNhapsService extends BaseService<PhieuNhaps, PhieuNhapsReq
     PhieuNhaps createByPhieuXuats(PhieuXuats e);
 
     PhieuNhaps updateByPhieuXuats(PhieuXuats e);
+
+    PhieuNhaps init(Integer maLoaiXuatNhap, Long id);
 }

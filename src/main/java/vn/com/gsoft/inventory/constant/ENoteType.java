@@ -2,7 +2,7 @@ package vn.com.gsoft.inventory.constant;
 
 public class ENoteType {
     /// <summary>
-    /// Receipt
+    /// Receipt  - Nhập kho
     /// </summary>
     public static final Integer Receipt = 1;
 
@@ -13,22 +13,22 @@ public class ENoteType {
     public static final String DeliveryStr = "2";
 
     /// <summary>
-    /// Return from customer
+    /// Return from customer  - Nhập kho Khách hàng trả lại
     /// </summary>
     public static final Integer ReturnFromCustomer = 3;
 
     /// <summary>
-    /// Return to supplier
+    /// Return to supplier - Xuất Trả lại nhà cung cấp
     /// </summary>
     public static final Integer ReturnToSupplier = 4;
 
     /// <summary>
-    /// Inventory adjustment
+    /// Inventory adjustment - Nhật + Xuất Điều chỉnh hàng tồn kho
     /// </summary>
     public static final Integer InventoryAdjustment = 5;
 
     /// <summary>
-    /// Initial inventory
+    /// Initial inventory   - Hàng tồn kho ban đầu
     /// </summary>
     public static final Integer InitialInventory = 6;
 

@@ -23,6 +23,11 @@ public class PhieuNhapsServiceImpl extends BaseServiceImpl<PhieuNhaps, PhieuNhap
     }
 
     @Override
+    public PhieuNhaps init(Integer maLoaiXuatNhap, Long id) {
+        return null;
+    }
+
+    @Override
     public PhieuNhaps createByPhieuXuats(PhieuXuats e) {
         return null;
     }
@@ -31,4 +36,6 @@ public class PhieuNhapsServiceImpl extends BaseServiceImpl<PhieuNhaps, PhieuNhap
     public PhieuNhaps updateByPhieuXuats(PhieuXuats e) {
         return null;
     }
+
+
 }
