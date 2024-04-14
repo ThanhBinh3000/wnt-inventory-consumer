@@ -19,8 +19,8 @@ public class PhieuXuatsReq extends BaseRequest {
     private BigDecimal daTra;
     private String nhaThuocMaNhaThuoc;
     private Integer maLoaiXuatNhap;
-    private Integer khachHangMaKhachHang;
-    private Integer nhaCungCapMaNhaCungCap;
+    private Long khachHangMaKhachHang;
+    private Long nhaCungCapMaNhaCungCap;
     private Integer bacSyMaBacSy;
     private Boolean active;
     private Boolean isModified;

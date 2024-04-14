@@ -31,9 +31,9 @@ public class PhieuThuChis extends BaseEntity {
     @Column(name = "NhaThuoc_MaNhaThuoc")
     private String nhaThuocMaNhaThuoc;
     @Column(name = "KhachHang_MaKhachHang")
-    private Integer khachHangMaKhachHang;
+    private Long khachHangMaKhachHang;
     @Column(name = "NhaCungCap_MaNhaCungCap")
-    private Integer nhaCungCapMaNhaCungCap;
+    private Long nhaCungCapMaNhaCungCap;
     @Column(name = "UserProfile_UserId")
     private Integer userProfileUserId;
     @Column(name = "Amount")

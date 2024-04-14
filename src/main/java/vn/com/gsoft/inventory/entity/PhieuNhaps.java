@@ -39,9 +39,9 @@ public class PhieuNhaps extends BaseEntity {
     @Column(name = "LoaiXuatNhap_MaLoaiXuatNhap")
     private Integer loaiXuatNhapMaLoaiXuatNhap;
     @Column(name = "NhaCungCap_MaNhaCungCap")
-    private Integer nhaCungCapMaNhaCungCap;
+    private Long nhaCungCapMaNhaCungCap;
     @Column(name = "KhachHang_MaKhachHang")
-    private Integer khachHangMaKhachHang;
+    private Long khachHangMaKhachHang;
     @Column(name = "Active")
     private Boolean active;
     @Column(name = "IsModified")

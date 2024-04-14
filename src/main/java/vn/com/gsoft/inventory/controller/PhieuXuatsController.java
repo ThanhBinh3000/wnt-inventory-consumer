@@ -42,15 +42,9 @@ public class PhieuXuatsController {
 
     @PostMapping(value = PathContains.URL_INIT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> init(@RequestParam(value = "id", required = false) Long id,
-                                             @RequestParam(value = "taskMode", required = false) Integer taskMode,
-                                             @RequestParam(value = "noteDate", required = false) Date noteDate,
-                                             @RequestParam(value = "partnerId", required = false) Integer partnerId,
-                                             @RequestParam(value = "noteTypeId", required = false, defaultValue = ENoteType.DeliveryStr) Integer noteTypeId,
-                                             @RequestParam(value = "isConnectivity", required = false, defaultValue = "0") Integer isConnectivity,
-                                             @RequestParam(value = "sampleNoteId", required = false) Integer sampleNoteId,
-                                             @RequestParam(value = "isManagement", required = false, defaultValue = "0") Integer isManagement) throws Exception {
-        return ResponseEntity.ok(ResponseUtils.ok(service.init(id,taskMode,noteDate,partnerId,noteTypeId,isConnectivity,sampleNoteId,isManagement)));
+    public ResponseEntity<BaseResponse> init(@RequestParam(value = "maLoaiXuatNhap", required = true) Integer maLoaiXuatNhap,
+                                             @RequestParam(value = "id", required = false) Long id) throws Exception {
+        return ResponseEntity.ok(ResponseUtils.ok(service.init(maLoaiXuatNhap, id)));
     }
 
     @PostMapping(value = PathContains.URL_CREATE, produces = MediaType.APPLICATION_JSON_VALUE)

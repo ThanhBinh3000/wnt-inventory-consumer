@@ -9,6 +9,7 @@ import vn.com.gsoft.inventory.entity.PhieuXuats;
 import vn.com.gsoft.inventory.model.dto.PhieuXuatsReq;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PhieuXuatsRepository extends BaseRepository<PhieuXuats, PhieuXuatsReq, Long> {
@@ -136,6 +137,8 @@ public interface PhieuXuatsRepository extends BaseRepository<PhieuXuats, PhieuXu
     )
     List<PhieuXuats> searchList(@Param("param") PhieuXuatsReq param);
 
-    @Query("SELECT MAX(px.soPhieuXuat) FROM PhieuXuats px")
-    Long findBySoPhieuXuatMax();
+    @Query("SELECT MAX(px.soPhieuXuat) FROM PhieuXuats px where px.nhaThuocMaNhaThuoc = ?1 and px.maLoaiXuatNhap=?2 ")
+    Long findBySoPhieuXuatMax(String storeCode, Integer maLoaiXuatNhap);
+
+    Optional<PhieuXuats> findBySoPhieuXuatAndMaLoaiXuatNhap(Long soPhieuXuat, Integer maLoaiXuatNhap);
 }

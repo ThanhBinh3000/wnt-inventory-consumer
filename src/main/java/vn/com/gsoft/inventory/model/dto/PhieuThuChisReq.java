@@ -13,8 +13,8 @@ public class PhieuThuChisReq extends BaseRequest {
     private Date ngayTao;
     private Integer loaiPhieu;
     private String nhaThuocMaNhaThuoc;
-    private Integer khachHangMaKhachHang;
-    private Integer nhaCungCapMaNhaCungCap;
+    private Long khachHangMaKhachHang;
+    private Long nhaCungCapMaNhaCungCap;
     private Integer userProfileUserId;
     private BigDecimal amount;
     private String nguoiNhan;
