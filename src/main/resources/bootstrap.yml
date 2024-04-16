@@ -1,7 +1,7 @@
 # Spring
 spring:
   application:
-    name: wnt-inventory
+    name: wnt-inventory-consumer
   profiles:
     active: prod
   cloud:

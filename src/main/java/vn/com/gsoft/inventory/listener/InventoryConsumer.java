@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class InventoryConsumer {
 
-    @KafkaListener(topics = "inventory-topic", groupId = "inventory-topic-consumer-group", containerFactory = "kafkaInternalListenerContainerFactory")
+    @KafkaListener(topics = "inventory-topic", groupId = "inventory-consumer-group", containerFactory = "kafkaInternalListenerContainerFactory")
     public void receiveExternal(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                                 @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partitionId,
                                 @Header(KafkaHeaders.OFFSET) Long offset,
