@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class PhieuXuats extends BaseEntity {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "SoPhieuXuat")
     private Long soPhieuXuat;
@@ -180,5 +181,7 @@ public class PhieuXuats extends BaseEntity {
     private Boolean IsConnectivity;
     @Transient
     private Boolean IsManagement;
+    @Transient
+    private List<PhieuXuatChiTiets> chiTiets;
 }
 

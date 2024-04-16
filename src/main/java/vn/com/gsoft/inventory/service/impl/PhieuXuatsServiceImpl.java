@@ -1,45 +1,53 @@
 package vn.com.gsoft.inventory.service.impl;
 
+import com.google.gson.Gson;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.com.gsoft.inventory.constant.ENoteType;
 import vn.com.gsoft.inventory.constant.RecordStatusContains;
-import vn.com.gsoft.inventory.entity.KhachHangs;
-import vn.com.gsoft.inventory.entity.NhaCungCaps;
-import vn.com.gsoft.inventory.entity.PhieuNhaps;
-import vn.com.gsoft.inventory.entity.PhieuXuats;
+import vn.com.gsoft.inventory.entity.*;
 import vn.com.gsoft.inventory.model.dto.PhieuXuatsReq;
 import vn.com.gsoft.inventory.model.system.Profile;
 import vn.com.gsoft.inventory.repository.KhachHangsRepository;
 import vn.com.gsoft.inventory.repository.NhaCungCapsRepository;
+import vn.com.gsoft.inventory.repository.PhieuXuatChiTietsRepository;
 import vn.com.gsoft.inventory.repository.PhieuXuatsRepository;
 import vn.com.gsoft.inventory.service.ApplicationSettingService;
+import vn.com.gsoft.inventory.service.KafkaProducer;
 import vn.com.gsoft.inventory.service.PhieuNhapsService;
 import vn.com.gsoft.inventory.service.PhieuXuatsService;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 
 @Service
 @Log4j2
 public class PhieuXuatsServiceImpl extends BaseServiceImpl<PhieuXuats, PhieuXuatsReq, Long> implements PhieuXuatsService {
     private PhieuXuatsRepository hdrRepo;
+    private PhieuXuatChiTietsRepository phieuXuatChiTietsRepository;
     private ApplicationSettingService applicationSettingService;
     private KhachHangsRepository khachHangsRepository;
     private NhaCungCapsRepository nhaCungCapsRepository;
     private PhieuNhapsService phieuNhapsService;
+    private KafkaProducer kafkaProducer;
 
     @Autowired
     public PhieuXuatsServiceImpl(PhieuXuatsRepository hdrRepo, ApplicationSettingService applicationSettingService,
-                                 KhachHangsRepository khachHangsRepository, NhaCungCapsRepository nhaCungCapsRepository, PhieuNhapsService phieuNhapsService) {
+                                 KhachHangsRepository khachHangsRepository, NhaCungCapsRepository nhaCungCapsRepository,
+                                 PhieuXuatChiTietsRepository phieuXuatChiTietsRepository,
+                                 PhieuNhapsService phieuNhapsService, KafkaProducer kafkaProducer) {
         super(hdrRepo);
         this.hdrRepo = hdrRepo;
         this.applicationSettingService = applicationSettingService;
         this.khachHangsRepository = khachHangsRepository;
         this.nhaCungCapsRepository = nhaCungCapsRepository;
         this.phieuNhapsService = phieuNhapsService;
+        this.kafkaProducer = kafkaProducer;
+        this.phieuXuatChiTietsRepository = phieuXuatChiTietsRepository;
     }
 
     @Override
@@ -117,6 +125,11 @@ public class PhieuXuatsServiceImpl extends BaseServiceImpl<PhieuXuats, PhieuXuat
         e.setCreated(new Date());
         e.setCreatedByUserId(getLoggedUser().getId());
         e = hdrRepo.save(e);
+        // save chi tiết
+        for(PhieuXuatChiTiets chiTiet : e.getChiTiets()){
+            chiTiet.setPhieuXuatMaPhieuXuat(e.getId());
+        }
+        this.phieuXuatChiTietsRepository.saveAll(e.getChiTiets());
         // xử lý phiếu chuyển kho
         if (Objects.equals(req.getMaLoaiXuatNhap(), ENoteType.WarehouseTransfer)) {
             PhieuNhaps phieuNhap = this.phieuNhapsService.createByPhieuXuats(e);
@@ -137,7 +150,7 @@ public class PhieuXuatsServiceImpl extends BaseServiceImpl<PhieuXuats, PhieuXuat
         if (optional.isEmpty()) {
             throw new Exception("Không tìm thấy dữ liệu.");
         }
-        if(!optional.get().getSoPhieuXuat().equals(req.getSoPhieuXuat())){
+        if (!optional.get().getSoPhieuXuat().equals(req.getSoPhieuXuat())) {
             Optional<PhieuXuats> phieuXuat = hdrRepo.findBySoPhieuXuatAndMaLoaiXuatNhap(req.getSoPhieuXuat(), req.getMaLoaiXuatNhap());
             if (phieuXuat.isPresent()) {
                 throw new Exception("Số phiếu đã tồn tại!");
@@ -162,6 +175,12 @@ public class PhieuXuatsServiceImpl extends BaseServiceImpl<PhieuXuats, PhieuXuat
         e.setModified(new Date());
         e.setModifiedByUserId(getLoggedUser().getId());
         e = hdrRepo.save(e);
+        // save chi tiết
+        this.phieuXuatChiTietsRepository.deleteByPhieuXuatMaPhieuXuat(e.getId());
+        for(PhieuXuatChiTiets chiTiet : e.getChiTiets()){
+            chiTiet.setPhieuXuatMaPhieuXuat(e.getId());
+        }
+        this.phieuXuatChiTietsRepository.saveAll(e.getChiTiets());
         // xử lý phiếu chuyển kho
         if (Objects.equals(req.getMaLoaiXuatNhap(), ENoteType.WarehouseTransfer)) {
             PhieuNhaps phieuNhap = this.phieuNhapsService.updateByPhieuXuats(e);
@@ -172,7 +191,15 @@ public class PhieuXuatsServiceImpl extends BaseServiceImpl<PhieuXuats, PhieuXuat
         return e;
     }
 
-    private void updateInventory(PhieuXuats e) {
-
+    private void updateInventory(PhieuXuats e) throws ExecutionException, InterruptedException, TimeoutException {
+        String topicName = "inventory-topic";
+        Gson gson = new Gson();
+        for (PhieuXuatChiTiets chiTiet : e.getChiTiets()) {
+            String key = e.getNhaThuocMaNhaThuoc() + "-" + chiTiet.getThuocThuocId();
+            PhieuXuats px = new PhieuXuats();
+            BeanUtils.copyProperties(e, px);
+            px.setChiTiets(List.copyOf(Collections.singleton(chiTiet)));
+            this.kafkaProducer.sendInternal(topicName, key, gson.toJson(px));
+        }
     }
 }
