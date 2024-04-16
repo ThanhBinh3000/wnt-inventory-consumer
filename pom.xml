@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>vn.com.gsoft</groupId>
-    <artifactId>wnt-inventory</artifactId>
+    <artifactId>wnt-inventory-consumer</artifactId>
     <version>0.0.1</version>
-    <name>wnt-inventory</name>
-    <description>wnt-inventory</description>
+    <name>wnt-inventory-consumer</name>
+    <description>wnt-inventory-consumer</description>
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.0</spring-cloud.version>

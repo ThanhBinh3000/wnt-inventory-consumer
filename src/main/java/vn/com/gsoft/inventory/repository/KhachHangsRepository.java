@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import vn.com.gsoft.inventory.entity.KhachHangs;
-import vn.com.gsoft.inventory.model.dto.KhachHangsReq;
 
 import java.util.Optional;
 
