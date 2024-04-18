@@ -22,16 +22,16 @@ public class Inventory {
     @Id
     @Column(name = "id")
     private Long id;
-    @Column(name = "DrugStoreID")
-    private String drugStoreID;
-    @Column(name = "DrugID")
-    private Integer drugID;
+    @Column(name = "DrugStoreId")
+    private String drugStoreId;
+    @Column(name = "DrugId")
+    private Long drugId;
     @Column(name = "LastValue")
     private Float lastValue;
-    @Column(name = "DrugUnitID")
-    private Integer drugUnitID;
-    @Column(name = "RecordStatusID")
-    private Integer recordStatusID;
+    @Column(name = "DrugUnitId")
+    private Long drugUnitId;
+    @Column(name = "RecordStatusId")
+    private Integer recordStatusId;
     @Column(name = "NeedUpdate")
     private Boolean needUpdate;
     @Column(name = "LastInPrice")
@@ -51,15 +51,15 @@ public class Inventory {
     @Column(name = "RegenRevenue")
     private Boolean regenRevenue;
     @Column(name = "ArchiveDrugId")
-    private Integer archiveDrugId;
+    private Long archiveDrugId;
     @Column(name = "ArchiveUnitId")
-    private Integer archiveUnitId;
+    private Long archiveUnitId;
     @Column(name = "HasTransactions")
     private Boolean hasTransactions;
     @Column(name = "ReceiptItemCount")
-    private Integer receiptItemCount;
+    private Long receiptItemCount;
     @Column(name = "DeliveryItemCount")
-    private Integer deliveryItemCount;
+    private Long deliveryItemCount;
     @Column(name = "ExpiredDate")
     private Date expiredDate;
     @Column(name = "InitValue")
@@ -69,7 +69,7 @@ public class Inventory {
     @Column(name = "InitInPrice")
     private BigDecimal initInPrice;
     @Column(name = "StoreId")
-    private Integer storeId;
+    private Long storeId;
     @Column(name = "ArchivedDate")
     private Date archivedDate;
     @Column(name = "OutPrice")

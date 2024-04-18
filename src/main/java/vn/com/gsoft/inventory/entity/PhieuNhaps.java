@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -123,5 +124,9 @@ public class PhieuNhaps extends BaseEntity {
     private BigDecimal discount;
     @Column(name = "TargetManagementId")
     private Long targetManagementId;
+
+    
+    @Transient
+    private List<PhieuNhapChiTiets> chiTiets;
 }
 
