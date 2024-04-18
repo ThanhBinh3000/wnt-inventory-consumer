@@ -47,7 +47,7 @@ public class InventoryConsumer {
         long hours = duration.toHours();
         long minutes = duration.toMinutes() % 60;
         long seconds = duration.getSeconds() % 60;
-        log.info("Khoảng thời gian theo giờ, phút, giây: {} giờ {} phút {} giây", hours, minutes, seconds);
+        log.info("Khoảng thời gian trong queue theo giờ, phút, giây: {} giờ {} phút {} giây", hours, minutes, seconds);
         if (wrapData.getCode().equals(InventoryConstant.XUAT)) {
             inventoryService.xuat(payload);
         }
