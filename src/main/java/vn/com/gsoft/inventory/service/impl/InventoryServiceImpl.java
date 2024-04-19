@@ -149,6 +149,11 @@ public class InventoryServiceImpl implements InventoryService {
         inventory.get().setReceiptItemCount(receiptItemCount);
         inventory.get().setHasTransactions((inventory.get().getDeliveryItemCount() + inventory.get().getReceiptItemCount()) > 0);
         inventory.get().setLastInPrice(phieuNhaps.getChiTiets().get(0).getRetailPrice() * (1 - phieuNhaps.getDiscount() / 100));
+        // tìm phiếu nhập mới nhất set để hạn dùng
+        Optional<PhieuNhapChiTiets> phieuNhapChiTiets = phieuNhapChiTietsRepository.findByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusIdAndMaxNgayNhap(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
+        if(phieuNhapChiTiets.isPresent()){
+            inventory.get().setExpiredDate(phieuNhaps.getChiTiets().get(0).getHanDung());
+        }
 
         inventoryRepository.save(inventory.get());
     }

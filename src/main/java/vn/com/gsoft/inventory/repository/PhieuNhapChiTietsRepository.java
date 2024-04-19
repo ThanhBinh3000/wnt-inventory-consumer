@@ -9,6 +9,7 @@ import vn.com.gsoft.inventory.entity.PhieuNhapChiTiets;
 import vn.com.gsoft.inventory.model.dto.PhieuNhapChiTietsReq;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PhieuNhapChiTietsRepository extends BaseRepository<PhieuNhapChiTiets, PhieuNhapChiTietsReq, Long> {
@@ -105,4 +106,6 @@ public interface PhieuNhapChiTietsRepository extends BaseRepository<PhieuNhapChi
 
     Double sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
     Long countByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
+
+    Optional<PhieuNhapChiTiets> findByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusIdAndMaxNgayNhap(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
 }
