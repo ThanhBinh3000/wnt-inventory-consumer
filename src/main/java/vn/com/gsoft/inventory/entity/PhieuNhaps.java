@@ -121,7 +121,7 @@ public class PhieuNhaps extends BaseEntity {
     @Column(name = "LinkFile")
     private String linkFile;
     @Column(name = "Discount")
-    private BigDecimal discount;
+    private Double discount;
     @Column(name = "TargetManagementId")
     private Long targetManagementId;
 

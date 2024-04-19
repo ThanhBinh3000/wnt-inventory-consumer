@@ -27,21 +27,21 @@ public class Inventory {
     @Column(name = "DrugId")
     private Long drugId;
     @Column(name = "LastValue")
-    private Float lastValue;
+    private Double lastValue;
     @Column(name = "DrugUnitId")
     private Long drugUnitId;
     @Column(name = "RecordStatusId")
-    private Integer recordStatusId;
+    private Long recordStatusId;
     @Column(name = "NeedUpdate")
     private Boolean needUpdate;
     @Column(name = "LastInPrice")
-    private Float lastInPrice;
+    private Double lastInPrice;
     @Column(name = "LastOutPrice")
-    private Float lastOutPrice;
+    private Double lastOutPrice;
     @Column(name = "RetailOutPrice")
-    private Float retailOutPrice;
+    private Double retailOutPrice;
     @Column(name = "RetailBatchOutPrice")
-    private Float retailBatchOutPrice;
+    private Double retailBatchOutPrice;
     @Column(name = "LastUpdated")
     private Date lastUpdated;
     @Column(name = "LastIncurredData")
@@ -63,11 +63,11 @@ public class Inventory {
     @Column(name = "ExpiredDate")
     private Date expiredDate;
     @Column(name = "InitValue")
-    private BigDecimal initValue;
+    private Double initValue;
     @Column(name = "InitOutPrice")
     private BigDecimal initOutPrice;
     @Column(name = "InitInPrice")
-    private BigDecimal initInPrice;
+    private Double initInPrice;
     @Column(name = "StoreId")
     private Long storeId;
     @Column(name = "ArchivedDate")

@@ -98,4 +98,8 @@ public interface PhieuXuatChiTietsRepository extends BaseRepository<PhieuXuatChi
   List<PhieuXuatChiTiets> searchList(@Param("param") PhieuXuatChiTietsReq param);
 
   void deleteByPhieuXuatMaPhieuXuat(Long id);
+
+  Double sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
+
+  Long countByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
 }

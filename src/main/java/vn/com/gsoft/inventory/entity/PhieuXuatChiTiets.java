@@ -47,17 +47,17 @@ public class PhieuXuatChiTiets extends BaseEntity{
     @Column(name = "IsReceiptDrugPriceRefGenerated")
     private Boolean isReceiptDrugPriceRefGenerated;
     @Column(name = "RetailQuantity")
-    private Float retailQuantity;
+    private Double retailQuantity;
     @Column(name = "HandledStatusId")
     private Long handledStatusId;
     @Column(name = "RetailPrice")
-    private Float retailPrice;
+    private Double retailPrice;
     @Column(name = "RequestUpdateFromBkgService")
     private Boolean requestUpdateFromBkgService;
     @Column(name = "ReduceNoteItemIds")
     private String reduceNoteItemIds;
     @Column(name = "ReduceQuantity")
-    private Float reduceQuantity;
+    private Double reduceQuantity;
     @Column(name = "IsModified")
     private Boolean isModified;
     @Column(name = "ItemOrder")
@@ -67,7 +67,7 @@ public class PhieuXuatChiTiets extends BaseEntity{
     @Column(name = "ArchiveUnitId")
     private Long archiveUnitId;
     @Column(name = "PreRetailQuantity")
-    private Float preRetailQuantity;
+    private Double preRetailQuantity;
     @Column(name = "BatchNumber")
     private String batchNumber;
     @Column(name = "ExpiredDate")

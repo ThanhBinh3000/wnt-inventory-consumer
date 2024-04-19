@@ -66,7 +66,7 @@ public class PhieuXuats extends BaseEntity {
     @Column(name = "OrderId")
     private Long orderId;
     @Column(name = "Discount")
-    private BigDecimal discount;
+    private Float discount;
     @Column(name = "Score")
     private BigDecimal score;
     @Column(name = "PreScore")

@@ -27,15 +27,15 @@ public class Thuocs extends BaseEntity{
     @Column(name = "HeSo")
     private Integer heSo;
     @Column(name = "GiaNhap")
-    private BigDecimal giaNhap;
+    private Double giaNhap;
     @Column(name = "GiaBanBuon")
     private BigDecimal giaBanBuon;
     @Column(name = "GiaBanLe")
     private BigDecimal giaBanLe;
     @Column(name = "SoDuDauKy")
-    private BigDecimal soDuDauKy;
+    private Double soDuDauKy;
     @Column(name = "GiaDauKy")
-    private BigDecimal giaDauKy;
+    private Double giaDauKy;
     @Column(name = "GioiHan")
     private Integer gioiHan;
     @Column(name = "NhaThuoc_MaNhaThuoc")
