@@ -75,7 +75,10 @@ public class InventoryServiceImpl implements InventoryService {
 //        LastDeliveryQuantity tinh toan phieu xuat
         Double lastReceiptQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
         Double lastDeliveryQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
-        inventory.get().setLastValue(inventory.get().getInitValue() + lastReceiptQuantity - lastDeliveryQuantity);
+        double result = inventory.get().getInitValue() + lastReceiptQuantity - lastDeliveryQuantity;
+        double lastValueResult = Math.round(result * 10.0) / 10.0;
+        inventory.get().setLastValue(lastValueResult);
+
         inventory.get().setLastUpdated(new Date());
         // count phieu xuat
         Long deliveryItemCount = phieuXuatChiTietsRepository.countByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
@@ -134,7 +137,9 @@ public class InventoryServiceImpl implements InventoryService {
 //        LastDeliveryQuantity tinh toan phieu xuat
         Double lastReceiptQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
         Double lastDeliveryQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
-        inventory.get().setLastValue(inventory.get().getInitValue() + lastReceiptQuantity - lastDeliveryQuantity);
+        double result = inventory.get().getInitValue() + lastReceiptQuantity - lastDeliveryQuantity;
+        double lastValueResult = Math.round(result * 10.0) / 10.0;
+        inventory.get().setLastValue(lastValueResult);
         inventory.get().setLastUpdated(new Date());
         // count phieu xuat
         Long deliveryItemCount = phieuXuatChiTietsRepository.countByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
