@@ -98,8 +98,8 @@ public interface PhieuXuatChiTietsRepository extends BaseRepository<PhieuXuatChi
   List<PhieuXuatChiTiets> searchList(@Param("param") PhieuXuatChiTietsReq param);
 
   void deleteByPhieuXuatMaPhieuXuat(Long id);
-
+  @Query("SELECT SUM(o.soLuong) FROM PhieuXuatChiTiets o JOIN PhieuXuats op on op.id = o.phieuXuatMaPhieuXuat where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3")
   Double sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
-
+  @Query("SELECT COUNT(o) FROM PhieuXuatChiTiets o JOIN PhieuXuats op on op.id = o.phieuXuatMaPhieuXuat where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3")
   Long countByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
 }
