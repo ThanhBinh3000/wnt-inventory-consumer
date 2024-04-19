@@ -24,7 +24,7 @@ import java.util.Date;
 public class InventoryConsumer {
     private InventoryService inventoryService;
 
-    @KafkaListener(topics = "inventory-topic", groupId = "inventory-consumer-group", containerFactory = "kafkaInternalListenerContainerFactory")
+    @KafkaListener(topics = "#{'${wnt.kafka.internal.consumer.topic.inventory}'}", groupId = "#{'${wnt.kafka.internal.consumer.group-id}'}", containerFactory = "kafkaInternalListenerContainerFactory")
     public void receiveExternal(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                                 @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partitionId,
                                 @Header(KafkaHeaders.OFFSET) Long offset,
