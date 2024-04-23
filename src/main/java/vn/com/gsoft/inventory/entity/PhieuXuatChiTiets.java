@@ -27,7 +27,7 @@ public class PhieuXuatChiTiets {
     @Column(name = "Thuoc_ThuocId")
     private Long thuocThuocId;
     @Column(name = "DonViTinh_MaDonViTinh")
-    private Integer donViTinhMaDonViTinh;
+    private Long donViTinhMaDonViTinh;
     @Column(name = "ChietKhau")
     private BigDecimal chietKhau;
     @Column(name = "GiaXuat")

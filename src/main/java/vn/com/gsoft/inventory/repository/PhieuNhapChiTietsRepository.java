@@ -101,8 +101,8 @@ public interface PhieuNhapChiTietsRepository extends BaseRepository<PhieuNhapChi
             + " ORDER BY c.id desc"
     )
     List<PhieuNhapChiTiets> searchList(@Param("param") PhieuNhapChiTietsReq param);
-    @Query("SELECT SUM(o.soLuong) FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3")
-    Double sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
+    @Query("SELECT SUM(o.soLuong) FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and o.donViTinhMaDonViTinh =?3 and op.recordStatusId =?4")
+    Double sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId,long donViTinh, long active);
     @Query("SELECT COUNT(o) FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3")
     Long countByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
     @Query("SELECT o FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3 and op.ngayNhap = (SELECT MAX(o2.ngayNhap) FROM PhieuNhaps o2) ORDER BY o.id DESC")

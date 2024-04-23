@@ -13,10 +13,10 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "Thuocs")
-public class Thuocs extends BaseEntity{
+public class Thuocs extends BaseEntity {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "MaThuoc")
     private String maThuoc;
@@ -252,5 +252,15 @@ public class Thuocs extends BaseEntity{
 
     @Transient
     private String tenViTri;
+
+
+    public Integer getHeSo() {
+        return heSo == null ? 0 : heSo;
+    }
+
+    public void setHeSo(Integer heSo) {
+        this.heSo = heSo;
+    }
+
 }
 

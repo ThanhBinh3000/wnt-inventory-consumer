@@ -37,17 +37,21 @@ public class InventoryServiceImpl implements InventoryService {
         WrapDataXuat dataXuat = gson.fromJson(wrapData, WrapDataXuat.class);
         PhieuXuats phieuXuats = dataXuat.getData();
         Optional<Inventory> inventory = inventoryRepository.findByDrugStoreIdAndDrugIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
+        if(phieuXuats.getChiTiets().get(0).getThuocThuocId() == null){
+            log.error("thuốc Id is null! trong phiếu {} của nhà thuốc {}", phieuXuats.getSoPhieuXuat(), phieuXuats.getNhaThuocMaNhaThuoc());
+            return;
+        }
+        Optional<Thuocs> thuocs = thuocsRepository.findById(phieuXuats.getChiTiets().get(0).getThuocThuocId());
+        if (thuocs.isEmpty()) {
+            log.error("Không tìm thấy thuốc Id {} trong phiếu {} của nhà thuốc {}", phieuXuats.getChiTiets().get(0).getThuocThuocId(), phieuXuats.getSoPhieuXuat(), phieuXuats.getNhaThuocMaNhaThuoc());
+            return;
+        }
         if (inventory.isEmpty()) {
             Inventory inv = new Inventory();
             // lấy thông tin ban đầu
             Optional<NhaThuocs> nhaThuocs = nhaThuocsRepository.findByMaNhaThuoc(phieuXuats.getNhaThuocMaNhaThuoc());
             if (nhaThuocs.isEmpty()) {
                 log.error("Không tìm thấy mã nhà thuốc {} trong phiếu {}", phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getSoPhieuXuat());
-                return;
-            }
-            Optional<Thuocs> thuocs = thuocsRepository.findById(phieuXuats.getChiTiets().get(0).getThuocThuocId());
-            if (thuocs.isEmpty()) {
-                log.error("Không tìm thấy thuốc Id {} trong phiếu {} của nhà thuốc {}", phieuXuats.getChiTiets().get(0).getThuocThuocId(), phieuXuats.getSoPhieuXuat(), phieuXuats.getNhaThuocMaNhaThuoc());
                 return;
             }
             boolean isChild = !StringUtils.isEmpty(nhaThuocs.get().getMaNhaThuocCha());
@@ -74,8 +78,28 @@ public class InventoryServiceImpl implements InventoryService {
 //        InitReceiptQuantity khoi tao
 //        LastReceiptQuantity tinh toan phieu nhan
 //        LastDeliveryQuantity tinh toan phieu xuat
-        Double lastReceiptQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
-        Double lastDeliveryQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
+        Double lastReceiptQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
+        if(lastReceiptQuantity == null){
+            lastReceiptQuantity = 0d;
+        }
+        if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
+            Double lastReceiptQuantity2 = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
+            if(lastReceiptQuantity2 == null){
+                lastReceiptQuantity2 = 0d;
+            }
+            lastReceiptQuantity = lastReceiptQuantity + (lastReceiptQuantity2 * thuocs.get().getHeSo());
+        }
+        Double lastDeliveryQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(),thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
+        if(lastDeliveryQuantity == null){
+            lastDeliveryQuantity = 0d;
+        }
+        if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
+            Double lastDeliveryQuantity2 = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
+            if(lastDeliveryQuantity2 == null){
+                lastDeliveryQuantity2 = 0d;
+            }
+            lastDeliveryQuantity = lastDeliveryQuantity + (lastDeliveryQuantity2 * thuocs.get().getHeSo());
+        }
         double result = inventory.get().getInitValue() + lastReceiptQuantity - lastDeliveryQuantity;
         double lastValueResult = Math.round(result * 10.0) / 10.0;
         inventory.get().setLastValue(lastValueResult);
@@ -99,17 +123,21 @@ public class InventoryServiceImpl implements InventoryService {
         WrapDataNhap dataNhap = gson.fromJson(wrapData, WrapDataNhap.class);
         PhieuNhaps phieuNhaps = dataNhap.getData();
         Optional<Inventory> inventory = inventoryRepository.findByDrugStoreIdAndDrugIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
+        if(phieuNhaps.getChiTiets().get(0).getThuocThuocId() == null){
+            log.error("thuốc Id is null! trong phiếu {} của nhà thuốc {}", phieuNhaps.getSoPhieuNhap(), phieuNhaps.getNhaThuocMaNhaThuoc());
+            return;
+        }
+        Optional<Thuocs> thuocs = thuocsRepository.findById(phieuNhaps.getChiTiets().get(0).getThuocThuocId());
+        if (thuocs.isEmpty()) {
+            log.error("Không tìm thấy thuốc Id {} trong phiếu {} của nhà thuốc {}", phieuNhaps.getChiTiets().get(0).getThuocThuocId(), phieuNhaps.getSoPhieuNhap(), phieuNhaps.getNhaThuocMaNhaThuoc());
+            return;
+        }
         if (inventory.isEmpty()) {
             Inventory inv = new Inventory();
             // lấy thông tin ban đầu
             Optional<NhaThuocs> nhaThuocs = nhaThuocsRepository.findByMaNhaThuoc(phieuNhaps.getNhaThuocMaNhaThuoc());
             if (nhaThuocs.isEmpty()) {
                 log.error("Không tìm thấy mã nhà thuốc {} trong phiếu {}", phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getSoPhieuNhap());
-                return;
-            }
-            Optional<Thuocs> thuocs = thuocsRepository.findById(phieuNhaps.getChiTiets().get(0).getThuocThuocId());
-            if (thuocs.isEmpty()) {
-                log.error("Không tìm thấy thuốc Id {} trong phiếu {} của nhà thuốc {}", phieuNhaps.getChiTiets().get(0).getThuocThuocId(), phieuNhaps.getSoPhieuNhap(), phieuNhaps.getNhaThuocMaNhaThuoc());
                 return;
             }
             boolean isChild = !StringUtils.isEmpty(nhaThuocs.get().getMaNhaThuocCha());
@@ -136,8 +164,28 @@ public class InventoryServiceImpl implements InventoryService {
 //        InitReceiptQuantity khoi tao
 //        LastReceiptQuantity tinh toan phieu nhan
 //        LastDeliveryQuantity tinh toan phieu xuat
-        Double lastReceiptQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
-        Double lastDeliveryQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
+        Double lastReceiptQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
+        if(lastReceiptQuantity == null){
+            lastReceiptQuantity = 0d;
+        }
+        if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
+            Double lastReceiptQuantity2 = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
+            if(lastReceiptQuantity2 == null){
+                lastReceiptQuantity2 = 0d;
+            }
+            lastReceiptQuantity = lastReceiptQuantity + (lastReceiptQuantity2 * thuocs.get().getHeSo());
+        }
+        Double lastDeliveryQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(),thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
+        if(lastDeliveryQuantity == null){
+            lastDeliveryQuantity = 0d;
+        }
+        if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
+            Double lastDeliveryQuantity2 = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
+            if(lastDeliveryQuantity2 == null){
+                lastDeliveryQuantity2 = 0d;
+            }
+            lastDeliveryQuantity = lastDeliveryQuantity + (lastDeliveryQuantity2 * thuocs.get().getHeSo());
+        }
         double result = inventory.get().getInitValue() + lastReceiptQuantity - lastDeliveryQuantity;
         double lastValueResult = Math.round(result * 10.0) / 10.0;
         inventory.get().setLastValue(lastValueResult);
@@ -152,7 +200,7 @@ public class InventoryServiceImpl implements InventoryService {
         inventory.get().setLastInPrice(phieuNhaps.getChiTiets().get(0).getRetailPrice() * (1 - phieuNhaps.getDiscount() / 100));
         // tìm phiếu nhập mới nhất set để hạn dùng
         List<PhieuNhapChiTiets> phieuNhapChiTiets = phieuNhapChiTietsRepository.findByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusIdAndMaxNgayNhap(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), RecordStatusContains.ACTIVE);
-        if(!phieuNhapChiTiets.isEmpty()){
+        if (!phieuNhapChiTiets.isEmpty()) {
             inventory.get().setExpiredDate(phieuNhapChiTiets.get(0).getHanDung());
         }
 
