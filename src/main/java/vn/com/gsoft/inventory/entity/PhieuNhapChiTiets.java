@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "PhieuNhapChiTiets")
-public class PhieuNhapChiTiets extends BaseEntity {
+public class PhieuNhapChiTiets  {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -108,5 +108,14 @@ public class PhieuNhapChiTiets extends BaseEntity {
     private String decscription;
     @Column(name = "StorageConditions")
     private String storageConditions;
+
+    public Float getRetailPrice() {
+        return retailPrice == null ? 0 : retailPrice;
+    }
+
+    public void setRetailPrice(Float retailPrice) {
+        this.retailPrice = retailPrice;
+    }
+
 }
 

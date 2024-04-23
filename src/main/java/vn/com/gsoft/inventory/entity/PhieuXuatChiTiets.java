@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "PhieuXuatChiTiets")
-public class PhieuXuatChiTiets extends BaseEntity{
+public class PhieuXuatChiTiets {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -106,5 +106,14 @@ public class PhieuXuatChiTiets extends BaseEntity{
     private String usage;
     @Column(name = "OutOwnerPriceChild")
     private BigDecimal outOwnerPriceChild;
+
+    public Double getRetailPrice() {
+        return retailPrice == null ? 0:retailPrice;
+    }
+
+    public void setRetailPrice(Double retailPrice) {
+        this.retailPrice = retailPrice;
+    }
+
 }
 

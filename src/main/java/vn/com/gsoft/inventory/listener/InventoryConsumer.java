@@ -4,6 +4,7 @@ package vn.com.gsoft.inventory.listener;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -22,9 +23,10 @@ import java.util.Date;
 @Slf4j
 @RequiredArgsConstructor
 public class InventoryConsumer {
+    @Autowired
     private InventoryService inventoryService;
 
-    @KafkaListener(topics = "#{'${wnt.kafka.internal.consumer.topic.inventory}'}", groupId = "#{'${wnt.kafka.internal.consumer.group-id}'}", containerFactory = "kafkaInternalListenerContainerFactory")
+    @KafkaListener(topics = "#{'${wnt.kafka.internal.consumer.topic.inventory}'}", groupId = "inventory-test", containerFactory = "kafkaInternalListenerContainerFactory")
     public void receiveExternal(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                                 @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partitionId,
                                 @Header(KafkaHeaders.OFFSET) Long offset,
@@ -48,11 +50,15 @@ public class InventoryConsumer {
         long minutes = duration.toMinutes() % 60;
         long seconds = duration.getSeconds() % 60;
         log.info("Khoảng thời gian trong queue theo giờ, phút, giây: {} giờ {} phút {} giây", hours, minutes, seconds);
-        if (wrapData.getCode().equals(InventoryConstant.XUAT)) {
-            inventoryService.xuat(payload);
-        }
-        if (wrapData.getCode().equals(InventoryConstant.NHAP)) {
-            inventoryService.nhap(payload);
+        try {
+            if (wrapData.getCode().equals(InventoryConstant.XUAT)) {
+                inventoryService.xuat(payload);
+            }
+            if (wrapData.getCode().equals(InventoryConstant.NHAP)) {
+                inventoryService.nhap(payload);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

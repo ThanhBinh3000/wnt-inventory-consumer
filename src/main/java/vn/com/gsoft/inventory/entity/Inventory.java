@@ -56,12 +56,15 @@ public class Inventory {
     private Long archiveUnitId;
     @Column(name = "HasTransactions")
     private Boolean hasTransactions;
+
+
     @Column(name = "ReceiptItemCount")
     private Long receiptItemCount;
     @Column(name = "DeliveryItemCount")
     private Long deliveryItemCount;
     @Column(name = "ExpiredDate")
     private Date expiredDate;
+
     @Column(name = "InitValue")
     private Double initValue;
     @Column(name = "InitOutPrice")
@@ -74,5 +77,32 @@ public class Inventory {
     private Date archivedDate;
     @Column(name = "OutPrice")
     private BigDecimal outPrice;
+
+
+    public Long getDeliveryItemCount() {
+        return deliveryItemCount == null ? 0 : deliveryItemCount;
+    }
+
+    public void setDeliveryItemCount(Long deliveryItemCount) {
+        this.deliveryItemCount = deliveryItemCount;
+    }
+
+
+    public Long getReceiptItemCount() {
+        return receiptItemCount == null ? 0 : receiptItemCount;
+    }
+
+    public void setReceiptItemCount(Long receiptItemCount) {
+        this.receiptItemCount = receiptItemCount;
+    }
+
+    public Double getInitValue() {
+        return initValue == null ? 0:initValue;
+    }
+
+    public void setInitValue(Double initValue) {
+        this.initValue = initValue;
+    }
+
 }
 

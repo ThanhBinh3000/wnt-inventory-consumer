@@ -65,6 +65,7 @@ public class PhieuXuats extends BaseEntity {
     private Date connectivityDateTime;
     @Column(name = "OrderId")
     private Long orderId;
+
     @Column(name = "Discount")
     private Float discount;
     @Column(name = "Score")
@@ -183,5 +184,14 @@ public class PhieuXuats extends BaseEntity {
     private Boolean IsManagement;
     @Transient
     private List<PhieuXuatChiTiets> chiTiets;
+
+    public Float getDiscount() {
+        return discount == null ? 0 : discount;
+    }
+
+    public void setDiscount(Float discount) {
+        this.discount = discount;
+    }
+
 }
 

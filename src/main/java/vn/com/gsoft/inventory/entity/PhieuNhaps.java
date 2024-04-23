@@ -120,6 +120,7 @@ public class PhieuNhaps extends BaseEntity {
     @Lob
     @Column(name = "LinkFile")
     private String linkFile;
+
     @Column(name = "Discount")
     private Double discount;
     @Column(name = "TargetManagementId")
@@ -128,5 +129,15 @@ public class PhieuNhaps extends BaseEntity {
     
     @Transient
     private List<PhieuNhapChiTiets> chiTiets;
+
+
+    public Double getDiscount() {
+        return discount == null ? 0 : discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
 }
 
