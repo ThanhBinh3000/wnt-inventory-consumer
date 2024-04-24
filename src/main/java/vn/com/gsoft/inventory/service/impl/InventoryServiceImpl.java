@@ -78,27 +78,27 @@ public class InventoryServiceImpl implements InventoryService {
 //        InitReceiptQuantity khoi tao
 //        LastReceiptQuantity tinh toan phieu nhan
 //        LastDeliveryQuantity tinh toan phieu xuat
-        Double lastReceiptQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
-        if(lastReceiptQuantity == null){
-            lastReceiptQuantity = 0d;
-        }
-        if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
-            Double lastReceiptQuantity2 = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
-            if(lastReceiptQuantity2 == null){
-                lastReceiptQuantity2 = 0d;
-            }
-            lastReceiptQuantity = lastReceiptQuantity + (lastReceiptQuantity2 * thuocs.get().getHeSo());
-        }
-        Double lastDeliveryQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(),thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
+        Double lastDeliveryQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
         if(lastDeliveryQuantity == null){
             lastDeliveryQuantity = 0d;
         }
         if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
-            Double lastDeliveryQuantity2 = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
+            Double lastDeliveryQuantity2 = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
             if(lastDeliveryQuantity2 == null){
                 lastDeliveryQuantity2 = 0d;
             }
             lastDeliveryQuantity = lastDeliveryQuantity + (lastDeliveryQuantity2 * thuocs.get().getHeSo());
+        }
+        Double lastReceiptQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(),thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
+        if(lastReceiptQuantity == null){
+            lastReceiptQuantity = 0d;
+        }
+        if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
+            Double lastReceiptQuantity2 = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuXuats.getNhaThuocMaNhaThuoc(), phieuXuats.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
+            if(lastReceiptQuantity2 == null){
+                lastReceiptQuantity2 = 0d;
+            }
+            lastReceiptQuantity = lastReceiptQuantity + (lastReceiptQuantity2 * thuocs.get().getHeSo());
         }
         double result = inventory.get().getInitValue() + lastReceiptQuantity - lastDeliveryQuantity;
         double lastValueResult = Math.round(result * 10.0) / 10.0;
@@ -164,27 +164,27 @@ public class InventoryServiceImpl implements InventoryService {
 //        InitReceiptQuantity khoi tao
 //        LastReceiptQuantity tinh toan phieu nhan
 //        LastDeliveryQuantity tinh toan phieu xuat
-        Double lastReceiptQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
-        if(lastReceiptQuantity == null){
-            lastReceiptQuantity = 0d;
-        }
-        if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
-            Double lastReceiptQuantity2 = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
-            if(lastReceiptQuantity2 == null){
-                lastReceiptQuantity2 = 0d;
-            }
-            lastReceiptQuantity = lastReceiptQuantity + (lastReceiptQuantity2 * thuocs.get().getHeSo());
-        }
-        Double lastDeliveryQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(),thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
+        Double lastDeliveryQuantity = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
         if(lastDeliveryQuantity == null){
             lastDeliveryQuantity = 0d;
         }
         if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
-            Double lastDeliveryQuantity2 = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
+            Double lastDeliveryQuantity2 = phieuXuatChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
             if(lastDeliveryQuantity2 == null){
                 lastDeliveryQuantity2 = 0d;
             }
             lastDeliveryQuantity = lastDeliveryQuantity + (lastDeliveryQuantity2 * thuocs.get().getHeSo());
+        }
+        Double lastReceiptQuantity = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(),thuocs.get().getDonViXuatLeMaDonViTinh(), RecordStatusContains.ACTIVE);
+        if(lastReceiptQuantity == null){
+            lastReceiptQuantity = 0d;
+        }
+        if (thuocs.get().getDonViThuNguyenMaDonViTinh() != null && thuocs.get().getDonViThuNguyenMaDonViTinh() > 0) {
+            Double lastReceiptQuantity2 = phieuNhapChiTietsRepository.sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(phieuNhaps.getNhaThuocMaNhaThuoc(), phieuNhaps.getChiTiets().get(0).getThuocThuocId(), thuocs.get().getDonViThuNguyenMaDonViTinh(), RecordStatusContains.ACTIVE);
+            if(lastReceiptQuantity2 == null){
+                lastReceiptQuantity2 = 0d;
+            }
+            lastReceiptQuantity = lastReceiptQuantity + (lastReceiptQuantity2 * thuocs.get().getHeSo());
         }
         double result = inventory.get().getInitValue() + lastReceiptQuantity - lastDeliveryQuantity;
         double lastValueResult = Math.round(result * 10.0) / 10.0;
