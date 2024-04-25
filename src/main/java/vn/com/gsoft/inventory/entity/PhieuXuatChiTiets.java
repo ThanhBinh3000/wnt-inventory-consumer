@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "PhieuXuatChiTiets")
-public class PhieuXuatChiTiets {
+public class PhieuXuatChiTiets extends BaseEntity{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)

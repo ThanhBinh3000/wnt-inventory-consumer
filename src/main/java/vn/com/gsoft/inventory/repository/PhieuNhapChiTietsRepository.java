@@ -101,10 +101,10 @@ public interface PhieuNhapChiTietsRepository extends BaseRepository<PhieuNhapChi
             + " ORDER BY c.id desc"
     )
     List<PhieuNhapChiTiets> searchList(@Param("param") PhieuNhapChiTietsReq param);
-    @Query("SELECT SUM(o.soLuong) FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and o.donViTinhMaDonViTinh =?3 and op.recordStatusId =?4")
+    @Query("SELECT SUM(o.soLuong) FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and o.donViTinhMaDonViTinh =?3 and op.recordStatusId =?4 and o.recordStatusId =?4")
     Double sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId,long donViTinh, long active);
-    @Query("SELECT COUNT(o) FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3")
+    @Query("SELECT COUNT(o) FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3 and o.recordStatusId =?3")
     Long countByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
-    @Query("SELECT o FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3 and op.ngayNhap = (SELECT MAX(o2.ngayNhap) FROM PhieuNhaps o2) ORDER BY o.id DESC")
+    @Query("SELECT o FROM PhieuNhapChiTiets o JOIN PhieuNhaps op on op.id = o.phieuNhapMaPhieuNhap where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3 and o.recordStatusId =?3 and op.ngayNhap = (SELECT MAX(op2.ngayNhap) FROM PhieuNhaps op2 JOIN PhieuNhapChiTiets o2 on op2.id = o2.phieuNhapMaPhieuNhap where op2.nhaThuocMaNhaThuoc =?1 and o2.thuocThuocId =?2 and op2.recordStatusId =?3) ORDER BY o.id DESC")
     List<PhieuNhapChiTiets> findByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusIdAndMaxNgayNhap(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
 }

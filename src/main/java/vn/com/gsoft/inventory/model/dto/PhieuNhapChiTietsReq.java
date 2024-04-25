@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 public class PhieuNhapChiTietsReq  extends BaseRequest {
-    private Integer phieuNhapMaPhieuNhap;
+    private Long phieuNhapMaPhieuNhap;
     private String nhaThuocMaNhaThuoc;
     private Long thuocThuocId;
     private Long donViTinhMaDonViTinh;

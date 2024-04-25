@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import vn.com.gsoft.inventory.entity.PhieuNhapChiTiets;
 import vn.com.gsoft.inventory.entity.PhieuXuatChiTiets;
 import vn.com.gsoft.inventory.model.dto.PhieuXuatChiTietsReq;
 
@@ -96,8 +97,11 @@ public interface PhieuXuatChiTietsRepository extends BaseRepository<PhieuXuatChi
   List<PhieuXuatChiTiets> searchList(@Param("param") PhieuXuatChiTietsReq param);
 
   void deleteByPhieuXuatMaPhieuXuat(Long id);
-  @Query("SELECT SUM(o.soLuong) FROM PhieuXuatChiTiets o JOIN PhieuXuats op on op.id = o.phieuXuatMaPhieuXuat where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and o.donViTinhMaDonViTinh = ?3 and op.recordStatusId =?4")
+  @Query("SELECT SUM(o.soLuong) FROM PhieuXuatChiTiets o JOIN PhieuXuats op on op.id = o.phieuXuatMaPhieuXuat where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and o.donViTinhMaDonViTinh = ?3 and op.recordStatusId =?4 and o.recordStatusId =?4")
   Double sumByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId,long donViTinh, long active);
-  @Query("SELECT COUNT(o) FROM PhieuXuatChiTiets o JOIN PhieuXuats op on op.id = o.phieuXuatMaPhieuXuat where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3")
+  @Query("SELECT COUNT(o) FROM PhieuXuatChiTiets o JOIN PhieuXuats op on op.id = o.phieuXuatMaPhieuXuat where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3 and o.recordStatusId =?3")
   Long countByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusId(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
+
+  @Query("SELECT o FROM PhieuXuatChiTiets o JOIN PhieuXuats op on op.id = o.phieuXuatMaPhieuXuat where op.nhaThuocMaNhaThuoc =?1 and o.thuocThuocId =?2 and op.recordStatusId =?3 and o.recordStatusId =?3 and op.ngayXuat = (SELECT MAX(op2.ngayXuat) FROM PhieuXuats op2 JOIN PhieuXuatChiTiets o2 on op2.id = o2.phieuXuatMaPhieuXuat where op2.nhaThuocMaNhaThuoc =?1 and o2.thuocThuocId =?2 and op2.recordStatusId =?3) ORDER BY o.id DESC")
+  List<PhieuXuatChiTiets> findByNhaThuocMaNhaThuocAndThuocThuocIdAndRecordStatusIdAndMaxNgayXuat(String nhaThuocMaNhaThuoc, Long thuocThuocId, long active);
 }
