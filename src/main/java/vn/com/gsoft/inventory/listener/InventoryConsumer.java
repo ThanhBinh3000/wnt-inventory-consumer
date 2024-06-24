@@ -12,11 +12,16 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import vn.com.gsoft.inventory.constant.InventoryConstant;
+import vn.com.gsoft.inventory.entity.ProcessDtl;
 import vn.com.gsoft.inventory.model.system.WrapData;
+import vn.com.gsoft.inventory.repository.ProcessDtlRepository;
+import vn.com.gsoft.inventory.repository.ProcessRepository;
 import vn.com.gsoft.inventory.service.InventoryService;
-
+import vn.com.gsoft.inventory.entity.Process;
 import java.time.*;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RefreshScope
@@ -25,7 +30,10 @@ import java.util.Date;
 public class InventoryConsumer {
     @Autowired
     private InventoryService inventoryService;
-
+    @Autowired
+    private ProcessRepository processRepository;
+    @Autowired
+    private ProcessDtlRepository processDtlRepository;
     @KafkaListener(topics = "#{'${wnt.kafka.internal.consumer.topic.inventory}'}", groupId = "#{'${wnt.kafka.internal.consumer.group-id}'}", containerFactory = "kafkaInternalListenerContainerFactory")
     public void receiveExternal(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                                 @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partitionId,
@@ -50,6 +58,16 @@ public class InventoryConsumer {
         long minutes = duration.toMinutes() % 60;
         long seconds = duration.getSeconds() % 60;
         log.info("Khoảng thời gian trong queue theo giờ, phút, giây: {} giờ {} phút {} giây", hours, minutes, seconds);
+        Optional<Process> processOpt = processRepository.findByBatchKey(wrapData.getBatchKey());
+        Optional<ProcessDtl> processDtlOpt = processDtlRepository.findByBatchKeyAndIndex(wrapData.getBatchKey(), wrapData.getIndex());
+        if (processOpt.isPresent()) {
+            processOpt.get().setStatus(1);
+            processRepository.save(processOpt.get());
+        }
+        if (processDtlOpt.isPresent()) {
+            processDtlOpt.get().setStatus(1);
+            processDtlRepository.save(processDtlOpt.get());
+        }
         try {
             if (wrapData.getCode().equals(InventoryConstant.XUAT)) {
                 inventoryService.xuat(payload);
@@ -57,8 +75,36 @@ public class InventoryConsumer {
             if (wrapData.getCode().equals(InventoryConstant.NHAP)) {
                 inventoryService.nhap(payload);
             }
+            // done
+            if (processDtlOpt.isPresent()) {
+                processDtlOpt.get().setStatus(2);
+                processDtlOpt.get().setReturnCode(0);
+                processDtlRepository.save(processDtlOpt.get());
+            }
+            if (processOpt.isPresent() && processOpt.get().getReturnCode() == null) {
+                processOpt.get().setReturnCode(0);
+                processRepository.save(processOpt.get());
+            }
         }catch (Exception e){
             e.printStackTrace();
+            log.error("Xảy ra lỗi: Code {}, Index: {}, Total: {}", wrapData.getCode(), wrapData.getIndex(), wrapData.getTotal());
+            // error
+            if (processDtlOpt.isPresent()) {
+                processDtlOpt.get().setStatus(2);
+                processDtlOpt.get().setReturnCode(1);
+                processDtlRepository.save(processDtlOpt.get());
+            }
+            if (processOpt.isPresent()) {
+                processOpt.get().setReturnCode(1);
+                processRepository.save(processOpt.get());
+            }
+        }finally {
+            if (Objects.equals(wrapData.getTotal(), wrapData.getIndex())){
+                if (processOpt.isPresent()) {
+                    processOpt.get().setStatus(2);
+                    processRepository.save(processOpt.get());
+                }
+            }
         }
     }
 }

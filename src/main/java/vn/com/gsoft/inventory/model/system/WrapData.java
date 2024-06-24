@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class WrapData {
-    private String bathKey;
+    private String batchKey;
     private String code;
     private Date sendDate;
     private Object data;
