@@ -79,6 +79,7 @@ public class InventoryConsumer {
             if (processDtlOpt.isPresent()) {
                 processDtlOpt.get().setStatus(2);
                 processDtlOpt.get().setReturnCode(0);
+                processDtlOpt.get().setEndDate(new Date());
                 processDtlRepository.save(processDtlOpt.get());
             }
             if (processOpt.isPresent() && processOpt.get().getReturnCode() == null) {
@@ -92,6 +93,7 @@ public class InventoryConsumer {
             if (processDtlOpt.isPresent()) {
                 processDtlOpt.get().setStatus(2);
                 processDtlOpt.get().setReturnCode(1);
+                processDtlOpt.get().setEndDate(new Date());
                 processDtlRepository.save(processDtlOpt.get());
             }
             if (processOpt.isPresent()) {
@@ -102,6 +104,7 @@ public class InventoryConsumer {
             if (Objects.equals(wrapData.getTotal(), wrapData.getIndex())){
                 if (processOpt.isPresent()) {
                     processOpt.get().setStatus(2);
+                    processOpt.get().setEndDate(new Date());
                     processRepository.save(processOpt.get());
                 }
             }
